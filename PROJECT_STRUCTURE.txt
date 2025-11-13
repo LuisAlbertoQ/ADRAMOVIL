@@ -1,0 +1,344 @@
+ESTRUCTURA COMPLETA DEL PROYECTO
+=====================================
+
+asistencia_app/
+│
+├── android/                                 # Configuración Android
+├── ios/                                     # Configuración iOS
+├── assets/                                  # Assets de la aplicación
+│   ├── images/                              # Imágenes
+│   ├── icons/                               # Iconos
+│   └── animations/                          # Animaciones Lottie
+│
+├── lib/
+│   │
+│   ├── main.dart                            # Punto de entrada
+│   │
+│   ├── core/                                # Funcionalidades compartidas
+│   │   ├── constants/
+│   │   │   └── app_constants.dart           # Constantes globales (API URLs, etc.)
+│   │   │
+│   │   ├── errors/
+│   │   │   ├── exceptions.dart              # Excepciones personalizadas
+│   │   │   └── failures.dart                # Failures para Either<Failure, T>
+│   │   │
+│   │   ├── network/
+│   │   │   └── network_info.dart            # Verificar conectividad
+│   │   │
+│   │   ├── usecases/
+│   │   │   └── usecase.dart                 # Clase base para use cases
+│   │   │
+│   │   ├── utils/
+│   │   │   └── logger.dart                  # Logger global
+│   │   │
+│   │   └── widgets/                         # Widgets compartidos (TODO)
+│   │
+│   ├── features/                            # Módulos por funcionalidad
+│   │   │
+│   │   ├── asistencia/                      # Feature: Registro de Asistencia
+│   │   │   │
+│   │   │   ├── data/                        # DATA LAYER
+│   │   │   │   ├── datasources/
+│   │   │   │   │   ├── asistencia_local_datasource.dart
+│   │   │   │   │   │   - Interface
+│   │   │   │   │   │   - Implementation (SQLite/Hive)
+│   │   │   │   │   │   - guardarAsistencia()
+│   │   │   │   │   │   - obtenerAsistencias()
+│   │   │   │   │   │   - obtenerPendientes()
+│   │   │   │   │   │
+│   │   │   │   │   └── asistencia_remote_datasource.dart
+│   │   │   │   │       - Interface
+│   │   │   │   │       - Implementation (Retrofit/Dio)
+│   │   │   │   │       - enviarAsistencia()
+│   │   │   │   │       - obtenerHistorial()
+│   │   │   │   │       - subirFoto()
+│   │   │   │   │
+│   │   │   │   ├── models/
+│   │   │   │   │   └── asistencia_model.dart
+│   │   │   │   │       - Extiende AsistenciaEntity
+│   │   │   │   │       - fromJson() / toJson()
+│   │   │   │   │       - fromMap() / toMap()
+│   │   │   │   │
+│   │   │   │   └── repositories/
+│   │   │   │       └── asistencia_repository_impl.dart
+│   │   │   │           - Implementa AsistenciaRepository
+│   │   │   │           - Coordina local + remote + network
+│   │   │   │           - Maneja lógica offline
+│   │   │   │
+│   │   │   ├── domain/                      # DOMAIN LAYER
+│   │   │   │   ├── entities/
+│   │   │   │   │   └── asistencia_entity.dart
+│   │   │   │   │       - Pure Dart class
+│   │   │   │   │       - Business objects
+│   │   │   │   │       - Equatable
+│   │   │   │   │
+│   │   │   │   ├── repositories/
+│   │   │   │   │   └── asistencia_repository.dart
+│   │   │   │   │       - Abstract class (interface)
+│   │   │   │   │       - registrarAsistencia()
+│   │   │   │   │       - obtenerHistorial()
+│   │   │   │   │       - sincronizarAsistencia()
+│   │   │   │   │
+│   │   │   │   └── usecases/
+│   │   │   │       ├── registrar_asistencia_usecase.dart
+│   │   │   │       ├── obtener_historial_usecase.dart (TODO)
+│   │   │   │       └── sincronizar_asistencias_usecase.dart (TODO)
+│   │   │   │
+│   │   │   └── presentation/                # PRESENTATION LAYER
+│   │   │       ├── bloc/
+│   │   │       │   ├── asistencia_bloc.dart
+│   │   │       │   ├── asistencia_event.dart
+│   │   │       │   └── asistencia_state.dart
+│   │   │       │
+│   │   │       ├── pages/                   # Pantallas (TODO)
+│   │   │       │   ├── registro_asistencia_page.dart
+│   │   │       │   └── historial_asistencia_page.dart
+│   │   │       │
+│   │   │       └── widgets/                 # Componentes UI (TODO)
+│   │   │           ├── asistencia_card.dart
+│   │   │           └── camera_widget.dart
+│   │   │
+│   │   ├── geolocalizacion/                 # Feature: Geolocalización
+│   │   │   ├── data/
+│   │   │   │   ├── datasources/             # (TODO)
+│   │   │   │   ├── models/                  # (TODO)
+│   │   │   │   └── repositories/            # (TODO)
+│   │   │   │
+│   │   │   ├── domain/
+│   │   │   │   ├── entities/
+│   │   │   │   │   └── ubicacion_entity.dart
+│   │   │   │   │       - UbicacionEntity
+│   │   │   │   │       - ZonaPermitidaEntity
+│   │   │   │   │
+│   │   │   │   ├── repositories/
+│   │   │   │   │   └── geolocalizacion_repository.dart
+│   │   │   │   │       - obtenerUbicacionActual()
+│   │   │   │   │       - estaEnZonaPermitida()
+│   │   │   │   │       - calcularDistancia()
+│   │   │   │   │
+│   │   │   │   └── usecases/                # (TODO)
+│   │   │   │
+│   │   │   └── presentation/
+│   │   │       ├── bloc/                    # (TODO)
+│   │   │       ├── pages/                   # (TODO)
+│   │   │       └── widgets/                 # (TODO)
+│   │   │
+│   │   ├── reconocimiento_facial/           # Feature: Reconocimiento Facial
+│   │   │   ├── data/
+│   │   │   │   ├── datasources/             # (TODO)
+│   │   │   │   ├── models/                  # (TODO)
+│   │   │   │   └── repositories/            # (TODO)
+│   │   │   │
+│   │   │   ├── domain/
+│   │   │   │   ├── entities/
+│   │   │   │   │   └── rostro_entity.dart
+│   │   │   │   │       - RostroEntity
+│   │   │   │   │       - ResultadoReconocimientoEntity
+│   │   │   │   │
+│   │   │   │   ├── repositories/
+│   │   │   │   │   └── reconocimiento_facial_repository.dart
+│   │   │   │   │       - capturarFoto()
+│   │   │   │   │       - detectarRostros()
+│   │   │   │   │       - verificarRostro()
+│   │   │   │   │
+│   │   │   │   └── usecases/                # (TODO)
+│   │   │   │
+│   │   │   └── presentation/
+│   │   │       ├── bloc/                    # (TODO)
+│   │   │       ├── pages/                   # (TODO)
+│   │   │       └── widgets/                 # (TODO)
+│   │   │
+│   │   ├── justificaciones/                 # Feature: Justificaciones
+│   │   │   ├── data/
+│   │   │   │   ├── datasources/             # (TODO)
+│   │   │   │   ├── models/                  # (TODO)
+│   │   │   │   └── repositories/            # (TODO)
+│   │   │   │
+│   │   │   ├── domain/
+│   │   │   │   ├── entities/
+│   │   │   │   │   └── justificacion_entity.dart
+│   │   │   │   │       - JustificacionEntity
+│   │   │   │   │       - motivo, descripcion, adjunto
+│   │   │   │   │       - estado (pendiente/aprobada/rechazada)
+│   │   │   │   │
+│   │   │   │   ├── repositories/            # (TODO)
+│   │   │   │   └── usecases/                # (TODO)
+│   │   │   │
+│   │   │   └── presentation/
+│   │   │       ├── bloc/                    # (TODO)
+│   │   │       ├── pages/                   # (TODO)
+│   │   │       └── widgets/                 # (TODO)
+│   │   │
+│   │   └── sincronizacion/                  # Feature: Sincronización Offline
+│   │       ├── data/
+│   │       │   ├── datasources/             # (TODO)
+│   │       │   ├── models/                  # (TODO)
+│   │       │   └── repositories/            # (TODO)
+│   │       │
+│   │       ├── domain/
+│   │       │   ├── entities/
+│   │       │   │   └── sync_status_entity.dart
+│   │       │   │       - SyncStatusEntity
+│   │       │   │       - pendientesAsistencia
+│   │       │   │       - ultimaSincronizacion
+│   │       │   │
+│   │       │   ├── repositories/
+│   │       │   │   └── sincronizacion_repository.dart
+│   │       │   │       - sincronizarTodo()
+│   │       │   │       - obtenerEstadoSincronizacion()
+│   │       │   │       - observarEstadoSincronizacion()
+│   │       │   │
+│   │       │   └── usecases/                # (TODO)
+│   │       │
+│   │       └── presentation/
+│   │           ├── bloc/                    # (TODO)
+│   │           ├── pages/                   # (TODO)
+│   │           └── widgets/                 # (TODO)
+│   │
+│   └── injection/                           # Dependency Injection
+│       └── injection_container.dart
+│           - Configuración de GetIt
+│           - Registro de dependencias
+│           - init() function
+│
+├── test/                                    # Tests (TODO)
+│   ├── core/
+│   ├── features/
+│   │   ├── asistencia/
+│   │   │   ├── data/
+│   │   │   ├── domain/
+│   │   │   └── presentation/
+│   │   └── ...
+│   └── fixtures/
+│
+├── .gitignore                               # Archivos ignorados por Git
+├── analysis_options.yaml                    # Reglas de análisis de código
+├── pubspec.yaml                             # Dependencias del proyecto
+├── README.md                                # Documentación principal
+├── ARCHITECTURE.md                          # Documentación de arquitectura
+└── PROJECT_STRUCTURE.txt                    # Este archivo
+
+
+ARCHIVOS CREADOS (✓ = Completado, ⏳ = TODO)
+====================================================
+
+CORE:
+✓ lib/core/constants/app_constants.dart
+✓ lib/core/errors/exceptions.dart
+✓ lib/core/errors/failures.dart
+✓ lib/core/network/network_info.dart
+✓ lib/core/usecases/usecase.dart
+✓ lib/core/utils/logger.dart
+
+ASISTENCIA (Feature completo de ejemplo):
+✓ lib/features/asistencia/data/datasources/asistencia_local_datasource.dart
+✓ lib/features/asistencia/data/datasources/asistencia_remote_datasource.dart
+✓ lib/features/asistencia/data/models/asistencia_model.dart
+✓ lib/features/asistencia/data/repositories/asistencia_repository_impl.dart
+✓ lib/features/asistencia/domain/entities/asistencia_entity.dart
+✓ lib/features/asistencia/domain/repositories/asistencia_repository.dart
+✓ lib/features/asistencia/domain/usecases/registrar_asistencia_usecase.dart
+✓ lib/features/asistencia/presentation/bloc/asistencia_bloc.dart
+✓ lib/features/asistencia/presentation/bloc/asistencia_event.dart
+✓ lib/features/asistencia/presentation/bloc/asistencia_state.dart
+
+GEOLOCALIZACIÓN (Partial - Domain only):
+✓ lib/features/geolocalizacion/domain/entities/ubicacion_entity.dart
+✓ lib/features/geolocalizacion/domain/repositories/geolocalizacion_repository.dart
+
+RECONOCIMIENTO FACIAL (Partial - Domain only):
+✓ lib/features/reconocimiento_facial/domain/entities/rostro_entity.dart
+✓ lib/features/reconocimiento_facial/domain/repositories/reconocimiento_facial_repository.dart
+
+JUSTIFICACIONES (Partial - Domain only):
+✓ lib/features/justificaciones/domain/entities/justificacion_entity.dart
+
+SINCRONIZACIÓN (Partial - Domain only):
+✓ lib/features/sincronizacion/domain/entities/sync_status_entity.dart
+✓ lib/features/sincronizacion/domain/repositories/sincronizacion_repository.dart
+
+DEPENDENCY INJECTION:
+✓ lib/injection/injection_container.dart
+
+MAIN:
+✓ lib/main.dart
+
+CONFIGURACIÓN:
+✓ pubspec.yaml
+✓ analysis_options.yaml
+✓ .gitignore
+
+DOCUMENTACIÓN:
+✓ README.md
+✓ ARCHITECTURE.md
+✓ PROJECT_STRUCTURE.txt
+
+
+PRÓXIMOS PASOS RECOMENDADOS
+====================================================
+
+1. IMPLEMENTAR DATA LAYER COMPLETO:
+   - Implementar LocalDataSource con SQLite/Hive
+   - Implementar RemoteDataSource con Retrofit
+   - Completar repositories de los demás features
+
+2. IMPLEMENTAR USE CASES:
+   - Crear use cases para cada operación
+   - Implementar lógica de negocio específica
+
+3. IMPLEMENTAR PRESENTATION:
+   - Crear Blocs completos para cada feature
+   - Diseñar y construir Pages (pantallas)
+   - Crear Widgets reutilizables
+
+4. CONFIGURAR BASES DE DATOS:
+   - Definir esquema SQLite
+   - Configurar Hive boxes
+   - Implementar migraciones
+
+5. INTEGRAR APIs:
+   - Crear cliente Retrofit
+   - Configurar interceptors
+   - Implementar autenticación
+
+6. TESTING:
+   - Tests unitarios para Use Cases
+   - Tests para Repositories
+   - Tests para Blocs
+   - Tests de integración
+
+
+COMANDOS IMPORTANTES
+====================================================
+
+# Instalar dependencias
+flutter pub get
+
+# Generar código (cuando uses @freezed, @injectable, etc.)
+flutter pub run build_runner build --delete-conflicting-outputs
+
+# Limpiar y regenerar
+flutter pub run build_runner clean
+flutter pub run build_runner build --delete-conflicting-outputs
+
+# Ejecutar app
+flutter run
+
+# Análisis de código
+flutter analyze
+
+# Formatear código
+dart format lib/
+
+# Tests
+flutter test
+
+
+NOTAS IMPORTANTES
+====================================================
+
+- Los archivos marcados con (TODO) tienen la estructura pero necesitan implementación
+- El feature "asistencia" está completo como ejemplo/template
+- Usa los mismos patrones de "asistencia" para implementar otros features
+- Todos los TODOs en el código indican puntos de implementación futura
+- La arquitectura está lista para escalar con nuevos features
