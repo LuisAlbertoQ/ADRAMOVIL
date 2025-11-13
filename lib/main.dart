@@ -5,7 +5,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Inicializar dependencias
+  print("✅ Iniciando app...");
   await di.init();
+  print("✅ Dependencias listas");
 
   // TODO: Inicializar Hive
   // await Hive.initFlutter();
